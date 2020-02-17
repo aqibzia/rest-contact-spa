@@ -6,7 +6,8 @@ import {ContactCard} from './contactCard';
 
 export const ShowContactList = (props) => {
     const [contacts, setContacts] = useState([]);
-    useEffect(() => {
+
+    const getContacts = () => {
         axios
             .get('http://localhost:4000/api/contacts')
             .then(res => {
@@ -15,15 +16,32 @@ export const ShowContactList = (props) => {
             .catch(err => {
                 console.log('Error from contact list')
             })
+    };
+
+    useEffect(() => {
+        getContacts();
     }, []);
+
+    const deleteContact = (id) => {
+        axios
+            .delete('http://localhost:4000/api/contacts/'+id)
+            .then(res => {
+                getContacts();
+            })
+            .catch(err => {
+                console.log(`${err} Error in deleting contact!`);
+            })
+    };
+
     let contactsList;
     if(!contacts) {
         contactsList = "there is no contact record!";
     } else {
         contactsList = contacts.map((contact, k) =>
-            <ContactCard contact={contact} key={k} />
+            <ContactCard contact={contact} key={k} deleteContact={deleteContact}/>
         );
     }
+
     return (
         <div className="ShowBookList">
             <div className="container">

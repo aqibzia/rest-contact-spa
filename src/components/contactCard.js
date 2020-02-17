@@ -14,6 +14,7 @@ export const ContactCard = (props) => {
                 <Link to={`/edit-contact/${contact._id}`} className="btn btn-outline-info btn-lg btn-block">
                     Edit Contact
                 </Link>
+                <button type="button" onClick={() => props.deleteContact(contact._id)} className="btn btn-outline-info btn-lg btn-block">Delete Contact</button>
             </div>
         </div>
     );

@@ -30,18 +30,6 @@ export const UpdateContactInfo = (props) => {
 
     };
 
-    const deleteContact = (e) => {
-      e.preventDefault();
-      axios
-          .delete('http://localhost:4000/api/contacts/'+props.match.params.id)
-          .then(res => {
-              props.history.push('/');
-          })
-          .catch(err => {
-              console.log(`${err} Error in deleting contact!`);
-          })
-    };
-
     const onChange = (e) => {
         setContact({...contact, [e.target.name]: e.target.value});
     };
@@ -115,7 +103,6 @@ export const UpdateContactInfo = (props) => {
                             />
                         </div>
                         <button type="button" onClick={updateContact} className="btn btn-outline-info btn-lg btn-block">Update Contact</button>
-                        <button type="button" onClick={deleteContact} className="btn btn-outline-info btn-lg btn-block">Delete Contact</button>
                     </form>
                 </div>
 
