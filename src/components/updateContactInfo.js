@@ -4,19 +4,13 @@ import axios from 'axios';
 import '../App.css';
 
 export const UpdateContactInfo = (props) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [gender, setGender] = useState('');
-    const [phone, setPhone] = useState('');
+    const [contact, setContact] = useState({name: '',email: '',gender: '',phone: ''});
 
     useEffect(() => {
         axios
             .get('http://localhost:4000/api/contacts/'+props.match.params.id)
             .then(res => {
-                setName(res.data.data.name);
-                setEmail(res.data.data.email);
-                setGender(res.data.data.gender);
-                setPhone(res.data.data.phone);
+                setContact(res.data.data);
             })
             .catch(err => {
                 console.log("Error from UpdateContactInfo");
@@ -25,15 +19,8 @@ export const UpdateContactInfo = (props) => {
 
     const updateContact = (e) => {
         e.preventDefault();
-        const data = {
-            name: name,
-            email: email,
-            gender: gender,
-            phone: phone
-        };
-
         axios
-            .put('http://localhost:4000/api/contacts/'+props.match.params.id, data)
+            .put('http://localhost:4000/api/contacts/'+props.match.params.id, contact)
             .then(res => {
                 props.history.push('/');
             })
@@ -45,13 +32,6 @@ export const UpdateContactInfo = (props) => {
 
     const deleteContact = (e) => {
       e.preventDefault();
-      const data = {
-          name: name,
-          email: email,
-          gender: gender,
-          phone: phone
-      };
-
       axios
           .delete('http://localhost:4000/api/contacts/'+props.match.params.id)
           .then(res => {
@@ -61,6 +41,11 @@ export const UpdateContactInfo = (props) => {
               console.log(`${err} Error in deleting contact!`);
           })
     };
+
+    const onChange = (e) => {
+        setContact({...contact, [e.target.name]: e.target.value});
+    };
+
     return (
         <div className="UpdateBookInfo">
             <div className="container">
@@ -88,8 +73,8 @@ export const UpdateContactInfo = (props) => {
                                 placeholder='name'
                                 name='name'
                                 className='form-control'
-                                value={name}
-                                onChange={e => setName(e.target.value)}
+                                value={contact.name}
+                                onChange={onChange}
                             />
                         </div>
                         <br />
@@ -101,8 +86,8 @@ export const UpdateContactInfo = (props) => {
                                 placeholder='Email'
                                 name='email'
                                 className='form-control'
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                value={contact.email}
+                                onChange={onChange}
                             />
                         </div>
 
@@ -113,8 +98,8 @@ export const UpdateContactInfo = (props) => {
                                 placeholder='Gender'
                                 name='gender'
                                 className='form-control'
-                                value={gender}
-                                onChange={e => setGender(e.target.value)}
+                                value={contact.gender}
+                                onChange={onChange}
                             />
                         </div>
 
@@ -125,8 +110,8 @@ export const UpdateContactInfo = (props) => {
                                 placeholder='Phone'
                                 name='phone'
                                 className='form-control'
-                                value={phone}
-                                onChange={e => setPhone(e.target.value)}
+                                value={contact.phone}
+                                onChange={onChange}
                             />
                         </div>
                         <button type="button" onClick={updateContact} className="btn btn-outline-info btn-lg btn-block">Update Contact</button>
